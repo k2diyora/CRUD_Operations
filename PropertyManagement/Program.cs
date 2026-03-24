@@ -15,13 +15,16 @@ var sqlConnectionString =
     ?? builder.Configuration["Values:SqlConnectionString"]
     ?? builder.Configuration.GetConnectionString("SqlConnectionString");
 
-if (string.IsNullOrWhiteSpace(sqlConnectionString))
-{
-    throw new InvalidOperationException("SqlConnectionString is missing. Set it in local.settings.json (Values).\n");
-}
-
 builder.Services.AddScoped<IDbConnection>(_ =>
-    new SqlConnection(sqlConnectionString));
+{
+    if (string.IsNullOrWhiteSpace(sqlConnectionString))
+    {
+        throw new InvalidOperationException(
+            "SqlConnectionString is missing. Configure it in Azure Function App settings.");
+    }
+
+    return new SqlConnection(sqlConnectionString);
+});
 
 builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
 builder.Services.AddScoped<IPropertyService, PropertyService>();

@@ -13,8 +13,8 @@ public class TenantFunctions
     }
 
     [Function("GetTenants")]
-    public async Task<HttpResponseData> GetTenants(
-        [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
+    public async Task<HttpResponseData> GetTenants( 
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
     {
         var tenants = await _service.GetAllAsync();
 
@@ -25,7 +25,7 @@ public class TenantFunctions
 
     [Function("CreateTenant")]
     public async Task<HttpResponseData> CreateTenant(
-        [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
     {
         try
         {
@@ -60,7 +60,7 @@ public class TenantFunctions
 
     [Function("UpdateTenant")]
     public async Task<HttpResponseData> UpdateTenant(
-        [HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "put")] HttpRequestData req)
     {
         try
         {
@@ -95,7 +95,7 @@ public class TenantFunctions
 
     [Function("DeleteTenant")]
     public async Task<HttpResponseData> DeleteTenant(
-        [HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "delete")] HttpRequestData req)
     {
         try
         {

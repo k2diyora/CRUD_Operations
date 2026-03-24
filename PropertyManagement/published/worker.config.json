@@ -1,0 +1,10 @@
+{
+  "description": {
+    "language": "dotnet-isolated",
+    "extensions": [ ".dll" ],
+    "defaultExecutablePath": "dotnet",
+    "defaultWorkerPath": "PropertyManagement.dll",
+    "workerIndexing": "true",
+    "canUsePlaceholder": true
+  }
+}

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
 
@@ -14,18 +15,30 @@ public class PropertyFunctions
 
     [Function("GetProperties")]
     public async Task<HttpResponseData> GetProperties(
-        [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req, ILogger log)
     {
-        var properties = await _service.GetAllAsync();
+        try
+        {
+            var properties = await _service.GetAllAsync();
 
-        var response = req.CreateResponse(HttpStatusCode.OK);
-        await response.WriteAsJsonAsync(properties);
-        return response;
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(properties);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            log.LogError(ex, "🔥 ERROR in GetProperties");
+
+            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await response.WriteStringAsync(ex.Message);
+            return response;
+        }
+        
     }
 
     [Function("CreateProperty")]
     public async Task<HttpResponseData> CreateProperty(
-    [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+    [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
     {
         try
         {
@@ -61,7 +74,7 @@ public class PropertyFunctions
 
     [Function("UpdateProperty")]
     public async Task<HttpResponseData> UpdateProperty(
-        [HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "put")] HttpRequestData req)
     {
         try
         {
@@ -97,7 +110,7 @@ public class PropertyFunctions
 
     [Function("DeleteProperty")]
     public async Task<HttpResponseData> DeleteProperty(
-        [HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "delete")] HttpRequestData req)
     {
         try
         {

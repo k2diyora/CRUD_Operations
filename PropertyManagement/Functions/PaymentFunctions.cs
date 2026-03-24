@@ -14,7 +14,7 @@ public class PaymentFunctions
 
     [Function("GetPayments")]
     public async Task<HttpResponseData> GetPayments(
-        [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
     {
         var payments = await _service.GetAllAsync();
 
@@ -25,7 +25,7 @@ public class PaymentFunctions
 
     [Function("CreatePayment")]
     public async Task<HttpResponseData> CreatePayment(
-        [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
     {
         try
         {
@@ -60,7 +60,7 @@ public class PaymentFunctions
 
     [Function("UpdatePayment")]
     public async Task<HttpResponseData> UpdatePayment(
-        [HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "put")] HttpRequestData req)
     {
         try
         {
@@ -95,7 +95,7 @@ public class PaymentFunctions
 
     [Function("DeletePayment")]
     public async Task<HttpResponseData> DeletePayment(
-        [HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "delete")] HttpRequestData req)
     {
         try
         {
