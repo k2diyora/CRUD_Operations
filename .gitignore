@@ -1,0 +1,16 @@
+# Visual Studio
+.vs/
+
+# Build output
+**/bin/
+**/obj/
+
+# Azure Functions local settings (secrets)
+PropertyManagement/local.settings.json
+
+# Frontend
+PropertyManagementFront/node_modules/
+
+# Env files
+.env
+.env.*
