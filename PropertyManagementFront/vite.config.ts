@@ -10,7 +10,8 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-              target: env.VITE_FUNCTIONS_URL || 'https://propertymanagement1-eefsggcmhzfwhtfr.canadacentral-01.azurewebsites.net/',
+              //target: env.VITE_FUNCTIONS_URL || 'https://propertymanagement1-eefsggcmhzfwhtfr.canadacentral-01.azurewebsites.net/',
+              target: env.VITE_FUNCTIONS_URL || 'http://localhost:5000/',
           changeOrigin: true,
         },
       },

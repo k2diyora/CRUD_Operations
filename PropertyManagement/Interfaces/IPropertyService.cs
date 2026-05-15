@@ -1,7 +1,7 @@
 ﻿public interface IPropertyService
 {
-    Task<IEnumerable<Property>> GetAllAsync();
-    Task CreateAsync(CreatePropertyDto dto);
-    Task UpdateAsync(UpdatePropertyDto dto);
-    Task DeleteAsync(int id);
+    Task<IEnumerable<Property>> GetAllAsync(int userId);
+    Task CreateAsync(CreatePropertyDto dto, int userId);
+    Task UpdateAsync(UpdatePropertyDto dto, int userId);
+    Task DeleteAsync(int id, int userId);
 }

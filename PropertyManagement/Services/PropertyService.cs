@@ -1,18 +1,21 @@
-﻿public class PropertyService : IPropertyService
+﻿using Dapper;
+using System.Data;
+
+public class PropertyService : IPropertyService
 {
-    private readonly IPropertyRepository _repo;
+    private readonly IDbConnection _db;
 
-    public PropertyService(IPropertyRepository repo)
+    public PropertyService(IDbConnection db)
     {
-        _repo = repo;
+        _db = db;
     }
 
-    public async Task<IEnumerable<Property>> GetAllAsync()
+    public async Task<IEnumerable<Property>> GetAllAsync(int userId)
     {
-        return await _repo.GetAllAsync();
+        return await _db.QueryAsync<Property>("SELECT * FROM Property WHERE UserId = @UserId", new { UserId = userId });
     }
 
-    public async Task CreateAsync(CreatePropertyDto dto)
+    public async Task CreateAsync(CreatePropertyDto dto, int userId)
     {
         PropertyValidator.Validate(dto);
 
@@ -23,17 +26,23 @@
             City = dto.City,
             PostalCode = dto.PostalCode,
             RentAmount = dto.RentAmount,
-            CreatedDate = GetTorontoNow()
+            CreatedDate = GetTorontoNow(),
+            UserId = userId
         };
 
-        await _repo.CreateAsync(property);
+        var sql = @"INSERT INTO Property (Name, Address, City, PostalCode, RentAmount, CreatedDate, UserId)
+                    VALUES (@Name, @Address, @City, @PostalCode, @RentAmount, @CreatedDate, @UserId)";
+
+        await _db.ExecuteAsync(sql, property);
     }
 
-    public async Task UpdateAsync(UpdatePropertyDto dto)
+    public async Task UpdateAsync(UpdatePropertyDto dto, int userId)
     {
         PropertyValidator.Validate(dto);
 
-        var existing = await _repo.GetByIdAsync(dto.Id);
+        var existing = await _db.QuerySingleOrDefaultAsync<Property>(
+            "SELECT * FROM Property WHERE Id = @Id AND UserId = @UserId",
+            new { dto.Id, UserId = userId });
         if (existing is null)
             throw new Exception($"Property with Id {dto.Id} not found");
 
@@ -44,18 +53,27 @@
             Address = dto.Address ?? existing.Address,
             City = dto.City ?? existing.City,
             PostalCode = dto.PostalCode ?? existing.PostalCode,
-            RentAmount = dto.RentAmount ?? existing.RentAmount
+            RentAmount = dto.RentAmount ?? existing.RentAmount,
+            UserId = userId
         };
 
-        await _repo.UpdateAsync(property);
+        var sql = @"UPDATE Property
+                    SET Name = @Name,
+                        Address = @Address,
+                        City = @City,
+                        PostalCode = @PostalCode,
+                        RentAmount = @RentAmount
+                    WHERE Id = @Id AND UserId = @UserId";
+
+        await _db.ExecuteAsync(sql, property);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(int id, int userId)
     {
         if (id <= 0)
             throw new Exception("Id must be greater than 0");
 
-        await _repo.DeleteAsync(id);
+        await _db.ExecuteAsync("DELETE FROM Property WHERE Id = @Id AND UserId = @UserId", new { Id = id, UserId = userId });
     }
 
     private static DateTime GetTorontoNow()

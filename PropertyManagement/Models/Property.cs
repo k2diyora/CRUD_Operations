@@ -7,4 +7,5 @@
     public string ?PostalCode { get; set; }
     public decimal RentAmount { get; set; }
     public DateTime CreatedDate { get; set; }
+    public int UserId { get; set; }
 }

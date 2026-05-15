@@ -1,7 +1,7 @@
 public interface IPaymentService
 {
-    Task<IEnumerable<Payment>> GetAllAsync();
-    Task CreateAsync(CreatePaymentDto dto);
-    Task UpdateAsync(UpdatePaymentDto dto);
-    Task DeleteAsync(int id);
+    Task<IEnumerable<Payment>> GetAllAsync(int userId);
+    Task CreateAsync(CreatePaymentDto dto, int userId);
+    Task UpdateAsync(UpdatePaymentDto dto, int userId);
+    Task DeleteAsync(int id, int userId);
 }

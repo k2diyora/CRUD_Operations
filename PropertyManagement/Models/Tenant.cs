@@ -5,4 +5,5 @@ public class Tenant
     public string ?Email { get; set; }
     public string ?Phone { get; set; }
     public int PropertyId { get; set; }
+    public int UserId { get; set; }
 }

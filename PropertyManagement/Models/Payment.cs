@@ -5,4 +5,5 @@ public class Payment
     public decimal Amount { get; set; }
     public DateTime PaymentDate { get; set; }
     public string ?Status { get; set; }
+    public int UserId { get; set; }
 }
